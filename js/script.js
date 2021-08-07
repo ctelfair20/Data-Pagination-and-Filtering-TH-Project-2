@@ -11,11 +11,6 @@ For assistance:
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
 
-// create function to generate studentCard
-// param: one student's info
-// access all constants needed for studentCard
-// create student card
-// return card
 
 /*
 Create the `showPage` function
@@ -66,8 +61,20 @@ function showPage(list, page) {
 Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
+function addPagination(list) {
+   const pagesNeeded = Math.ceil(list.length / 9);
+   console.log(pagesNeeded);
+   const linkList = document.querySelector('ul.link-list');
+   console.log(linkList);
+   linkList.innerHTML = '';
+   for (let i = 1; i < pagesNeeded; i++ ) {
+      const pageButton = `<li><button type="button">${i}</button></li>`
+      linkList.insertAdjacentHTML('beforeend', pageButton);
+   }
+}
 
 
 
 // Call functions
 showPage(data, 1);
+addPagination(data);
