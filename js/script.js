@@ -53,28 +53,49 @@ function showPage(list, page) {
    }
 }
 
-
-
-
-
 /*
 Create the `addPagination` function
 This function will create and insert/append the elements needed for the pagination buttons
 */
+
+const linkList = document.querySelector('ul.link-list');
+
 function addPagination(list) {
    const pagesNeeded = Math.ceil(list.length / 9);
    console.log(pagesNeeded);
-   const linkList = document.querySelector('ul.link-list');
-   console.log(linkList);
    linkList.innerHTML = '';
-   for (let i = 1; i < pagesNeeded; i++ ) {
-      const pageButton = `<li><button type="button">${i}</button></li>`
+
+   for (let i = 1; i <= pagesNeeded; i++ ) {
+      const pageButton = `<li><button type="button">${i}</button></li>`;
       linkList.insertAdjacentHTML('beforeend', pageButton);
    }
 }
 
-
-
 // Call functions
 showPage(data, 1);
 addPagination(data);
+
+const linkListLiButton = linkList.firstElementChild.firstElementChild;
+linkListLiButton.className = 'active';
+
+linkList.addEventListener('click', (e) => {
+   // Remove the active class from any other pagination button.
+   const button = e.target;
+   const linkListLiChildren = linkList.children;
+
+   if (button.tagName === 'BUTTON') {
+      if (button.className !== 'active') {
+         for (let i = 0; i < linkListLiChildren.length; i++) {
+            const liButton = linkListLiChildren[i].firstElementChild;
+            if (liButton.className === 'active') {
+               liButton.className = '';
+               button.className = 'active';
+               const pageNumber = button.textContent;
+               showPage(data, pageNumber);
+            // Add the active class to the pagination button that was just clicked.
+            // Call the showPage function passing the list parameter and the page number to display as arguments.
+            }
+         }
+      } 
+   }
+});
