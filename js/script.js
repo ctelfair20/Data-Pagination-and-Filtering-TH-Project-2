@@ -10,7 +10,23 @@ For assistance:
    Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
+const headerDiv = document.querySelector('.header');
+headerDiv.innerHTML = '';
+const H2Element = `<h2>Students</h2>`;
+const searchBar = `<label for="search" class="student-search">
+   <span>Search by name</span>
+   <input id="search" placeholder="Search by name...">
+   <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+   </label>`;
+   
+headerDiv.insertAdjacentHTML('beforeend', H2Element);
+headerDiv.insertAdjacentHTML('beforeend', searchBar);
 
+// headerDiv('input', (e) => {
+//    // iterate over data
+//    // access the first and last name values
+//    //
+// })
 
 /*
 Create the `showPage` function
@@ -40,7 +56,7 @@ function showPage(list, page) {
             <li class="student-item cf">
                <div class="student-details">
                   <img class="avatar" src=${largePicture} alt="Profile Picture">
-                  <h3>${firstName, lastName}</h3>
+                  <h3>${firstName} ${lastName}</h3>
                   <span class="email">${email}</span>
                </div>
                <div class="joined-details">
@@ -62,7 +78,6 @@ const linkList = document.querySelector('ul.link-list');
 
 function addPagination(list) {
    const pagesNeeded = Math.ceil(list.length / 9);
-   console.log(pagesNeeded);
    linkList.innerHTML = '';
 
    for (let i = 1; i <= pagesNeeded; i++ ) {
@@ -74,6 +89,8 @@ function addPagination(list) {
 // Call functions
 showPage(data, 1);
 addPagination(data);
+
+
 
 const linkListLiButton = linkList.firstElementChild.firstElementChild;
 linkListLiButton.className = 'active';
