@@ -10,6 +10,8 @@ For assistance:
    Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
    Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
 */
+
+// created search bar
 const headerDiv = document.querySelector('.header');
 headerDiv.innerHTML = '';
 const H2Element = `<h2>Students</h2>`;
@@ -22,52 +24,85 @@ const searchBar = `<label for="search" class="student-search">
 headerDiv.insertAdjacentHTML('beforeend', H2Element);
 headerDiv.insertAdjacentHTML('beforeend', searchBar);
 
-// headerDiv('input', (e) => {
-//    // iterate over data
-//    // access the first and last name values
-//    //
-// })
+// search bar functionality mostly works
+headerDiv.addEventListener('keyup', (e) => {
+   // create a collection of all the h3 tags...gives me all  names
+   const fullNamesList = document.getElementsByTagName('h3'); 
+   const inputVal = e.target.value.toUpperCase();
+   // iterate over collection...one full name each iteration
+   for (let i = 0; i < fullNamesList.length; i++) {
+      fullNamesList[i].className = '';
+      // accessing each elements text.content...whats in the h3
+      const name = fullNamesList[i].textContent.toUpperCase();
+      // access the h3's grandparent...li.class='student-item-cf'
+      const fullNamesGrandParentLi = fullNamesList[i].parentNode.parentNode;
+      // compare the target's input value with the textContent
+      // if the input value !== a substring of current h3
+      if (!name.includes(inputVal)) {
+         // set grandparent's display value to none 
+         fullNamesGrandParentLi.style.display = 'none';
+      } else if (inputVal === '') {
+         fullNamesGrandParentLi.style.display = 'initial';
+      }
+   }
+});
+
 
 /*
 Create the `showPage` function
 This function will create and insert/append the elements needed to display a "page" of nine students
 */
-// function showPage 
+
+let studentListItems = [];
+
 function showPage(list, page) { 
-   // takes in a list of student data and a page number
-   // set index start
    let startIndex = (page * 9) - 9;
-   // set index end
    let endIndex = page * 9;
-   // set ul to the ul element with the class student-list
    const studentList = document.querySelector('ul.student-list');
-   // use innerHTML to set student-list to ''
    studentList.innerHTML = '';
-      // loop over list param 
+   
    for (let i = 0; i < list.length; i++) {
-      // if the current index (i) is greater than or equal to the start index variable and less than the end index variable. 
+      const firstName = list[i].name.first;
+      const lastName = list[i].name.last;
+      const email = list[i].email;
+      const date = list[i].registered.date;
+      const largePicture = list[i].picture.large;
+      const studentCard = `
+         <li class="student-item cf">
+            <div class="student-details">
+               <img class="avatar" src=${largePicture} alt="Profile Picture">
+               <h3>${firstName} ${lastName}</h3>
+               <span class="email">${email}</span>
+            </div>
+            <div class="joined-details">
+               <span class="date">Joined ${date}</span>
+            </div>
+         </li>
+      `
+      studentListItems.push(studentCard);
+
       if (i >= startIndex && i < endIndex) {
-         const firstName = list[i].name.first;
-         const lastName = list[i].name.last;
-         const email = list[i].email;
-         const date = list[i].registered.date;
-         const largePicture = list[i].picture.large;
-         const studentCard = `
-            <li class="student-item cf">
-               <div class="student-details">
-                  <img class="avatar" src=${largePicture} alt="Profile Picture">
-                  <h3>${firstName} ${lastName}</h3>
-                  <span class="email">${email}</span>
-               </div>
-               <div class="joined-details">
-                  <span class="date">Joined ${date}</span>
-               </div>
-            </li>
-         `
          studentList.insertAdjacentHTML('beforeend', studentCard);
       }
    }
 }
+
+headerDiv.addEventListener('input', (e) => {
+   
+   const fullNamesList = document.getElementsByTagName('h3'); 
+   const inputVal = e.target.value.toUpperCase();
+   
+   for (let i = 0; i < fullNamesList.length; i++) {
+      fullNamesList[i].className = '';
+      const name = fullNamesList[i].textContent.toUpperCase();
+      const fullNamesGrandParentLi = fullNamesList[i].parentNode.parentNode;
+      if (!name.includes(inputVal)) {
+         fullNamesGrandParentLi.style.display = 'none';
+      } else if (inputVal === '') {
+        fullNamesGrandParentLi.style.display = 'initial';
+      }
+   }
+});
 
 /*
 Create the `addPagination` function
@@ -96,7 +131,7 @@ const linkListLiButton = linkList.firstElementChild.firstElementChild;
 linkListLiButton.className = 'active';
 
 linkList.addEventListener('click', (e) => {
-   // Remove the active class from any other pagination button.
+
    const button = e.target;
    const linkListLiChildren = linkList.children;
 
@@ -109,8 +144,6 @@ linkList.addEventListener('click', (e) => {
                button.className = 'active';
                const pageNumber = button.textContent;
                showPage(data, pageNumber);
-            // Add the active class to the pagination button that was just clicked.
-            // Call the showPage function passing the list parameter and the page number to display as arguments.
             }
          }
       } 
